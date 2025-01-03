@@ -44,7 +44,12 @@ func SearchUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.Type {
 
 		// These keys should exit the program.
-		case tea.KeyCtrlC, tea.KeyEsc:
+		case tea.KeyEsc:
+            if !m.normalMode {
+                m.normalMode = true
+            }
+
+		case tea.KeyCtrlC:
 			return m, tea.Quit
 
 		// The "up" and "k" keys move the cursor up
@@ -92,8 +97,24 @@ func SearchUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.textInput, cmd = m.textInput.Update(msg)
 			return m, cmd
 		default:
-			m.textInput, cmd = m.textInput.Update(msg)
-			return m, tea.Batch(cmd, m.queryArticlesCmd())
+			if !m.normalMode {
+				m.textInput, cmd = m.textInput.Update(msg)
+				// fmt.Println(msg)
+                m.cursor = 0
+				return m, tea.Batch(cmd, m.queryArticlesCmd())
+			} else if m.normalMode && (msg.String() == "a" || msg.String() == "i")  {
+                m.normalMode = !m.normalMode
+            }else if m.normalMode && msg.String() == "j"  {
+                if m.cursor < len(m.Articles)-1 {
+                    m.cursor++
+                }
+            }else if m.normalMode && msg.String() == "k"  {
+                if m.cursor > 0 {
+                    m.cursor--
+                }
+            }
+
+
 		}
 	case apiResponseMsg:
 		if msg.query != m.textInput.Value() {

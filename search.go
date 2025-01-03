@@ -23,7 +23,7 @@ func SearchView(m model) string {
 	}
 
 	// The footer
-	s += "\nNavigate: ←↑↓→ ↲. Quit: ESC.\n"
+	s += "\nNavigate: ←↑↓→ ↲. Enter vim normal mode: ESC.\n"
 	s += m.info
 
 	// Send the UI for rendering
@@ -41,7 +41,6 @@ func SearchUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.info = ""
 
 		// Cool, what was the actual key pressed?
-        // fmt.Println(msg.String())
         msgStr := msg.String()
         switch {
 		case msgStr == "esc":

@@ -51,7 +51,11 @@ func ArticleUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case tea.KeyLeft:
 			m.pageName = "search"
-		}
+        default:
+            if msg.String() == "h"{
+			    m.pageName = "search"
+            }
+		} 
 	}
 
 	// Handle keyboard and mouse events in the viewport

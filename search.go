@@ -7,18 +7,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
-func truncate(str string, length int) (truncated string) {
-    if length <= 0 {
-        return
-    }
-    for i, char := range str {
-        if i >= length {
-            break
-        }
-        truncated += string(char)
-    }
-    return
-}
 
 func SearchView(m model) string {
 	s := "wki - Search Wikipedia\n\n"
@@ -31,7 +19,7 @@ func SearchView(m model) string {
 			cursor = "*"
 		}
 		// Render the row
-        wrapedDescription := lipgloss.NewStyle().MaxWidth(m.viewport.Width - 20).Inline(true).Render(m.Articles[i].Description)
+		wrapedDescription := lipgloss.NewStyle().MaxWidth(m.viewport.Width - 20).Inline(true).Render(m.Articles[i].Description)
 		s += fmt.Sprintf("%s %s — %s \n", cursor, listArticleStyle(m.Articles[i].Title), wrapedDescription)
 	}
 
@@ -54,12 +42,12 @@ func SearchUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.info = ""
 
 		// Cool, what was the actual key pressed?
-        msgStr := msg.String()
-        switch {
+		msgStr := msg.String()
+		switch {
 		case msgStr == "esc":
-            if !m.normalMode {
-                m.normalMode = true
-            }
+			if !m.normalMode {
+				m.normalMode = true
+			}
 		case msgStr == "ctrl+c":
 			return m, tea.Quit
 		case msgStr == "up":
@@ -70,17 +58,17 @@ func SearchUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.cursor < len(m.Articles)-1 {
 				m.cursor++
 			}
-		case msgStr == "j" && m.normalMode: 
-            if m.cursor < len(m.Articles)-1 {
-                m.cursor++
-            }
-		case msgStr == "k" && m.normalMode: 
-            if m.cursor > 0 {
-                m.cursor--
-            }
-		case (msgStr == "a" || msgStr ==  "i") && m.normalMode:
-            m.normalMode = !m.normalMode
-        case msgStr ==  "enter":
+		case msgStr == "j" && m.normalMode:
+			if m.cursor < len(m.Articles)-1 {
+				m.cursor++
+			}
+		case msgStr == "k" && m.normalMode:
+			if m.cursor > 0 {
+				m.cursor--
+			}
+		case (msgStr == "a" || msgStr == "i") && m.normalMode:
+			m.normalMode = !m.normalMode
+		case msgStr == "enter":
 			// TODO: on right-key press if we're at the last
 			// character of the input we should go to the
 			// article view.
@@ -109,16 +97,16 @@ func SearchUpdate(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.Articles[m.cursor] = newArticle
 			m.content = lipgloss.NewStyle().Width(m.viewport.Width).Render(newArticle.Content)
 			m.viewport.SetContent(m.content)
-		case msgStr ==  "left" || msgStr == "right":
+		case msgStr == "left" || msgStr == "right":
 			m.textInput, cmd = m.textInput.Update(msg)
 			return m, cmd
-        default:
+		default:
 			if !m.normalMode {
 				m.textInput, cmd = m.textInput.Update(msg)
-                m.cursor = 0
+				m.cursor = 0
 				return m, tea.Batch(cmd, m.queryArticlesCmd())
-	 		} 
-        }
+			}
+		}
 	case apiResponseMsg:
 		if msg.query != m.textInput.Value() {
 			break

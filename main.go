@@ -45,16 +45,16 @@ type model struct {
 	pageName string
 	client   *Client
 	// Used in search view
-	textInput  textinput.Model
-	Articles   map[int]Article
-	cursor     int
-	info       string
+	textInput textinput.Model
+	Articles  map[int]Article
+	cursor    int
+	info      string
 	// Article view
 	shownArticle string
 	viewport     viewport.Model
 	ready        bool
 	content      string
-	normalMode bool
+	normalMode   bool
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -117,14 +117,14 @@ func initialModel(topic string) model {
 	vp.Style = lipgloss.NewStyle()
 
 	return model{
-		pageName:  "search",
-		client:    client,
-		textInput: ti,
-		Articles:  DefaultArticleMap,
-		content:   "Waiting for content...",
-		ready:     false,
-		viewport:  vp,
-        normalMode: false,
+		pageName:   "search",
+		client:     client,
+		textInput:  ti,
+		Articles:   DefaultArticleMap,
+		content:    "Waiting for content...",
+		ready:      false,
+		viewport:   vp,
+		normalMode: false,
 	}
 }
 

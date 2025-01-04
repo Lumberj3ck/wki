@@ -23,7 +23,7 @@ func SearchView(m model) string {
 	}
 
 	// The footer
-	s += "\nNavigate: ←↑↓→ ↲. Enter vim normal mode: ESC.\n"
+	s += "\nNavigate: ←↑↓→ ↲.\nEnter vim normal mode: ESC.\nPress <CTRL-C> to exit.\n"
 	s += m.info
 
 	// Send the UI for rendering

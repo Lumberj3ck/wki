@@ -7,6 +7,18 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
+func truncate(str string, length int) (truncated string) {
+    if length <= 0 {
+        return
+    }
+    for i, char := range str {
+        if i >= length {
+            break
+        }
+        truncated += string(char)
+    }
+    return
+}
 
 func SearchView(m model) string {
 	s := "wki - Search Wikipedia\n\n"
@@ -19,7 +31,8 @@ func SearchView(m model) string {
 			cursor = "*"
 		}
 		// Render the row
-		s += fmt.Sprintf("%s %s — %s \n", cursor, listArticleStyle(m.Articles[i].Title), m.Articles[i].Description)
+        wrapedDescription := lipgloss.NewStyle().MaxWidth(m.viewport.Width - 20).Inline(true).Render(m.Articles[i].Description)
+		s += fmt.Sprintf("%s %s — %s \n", cursor, listArticleStyle(m.Articles[i].Title), wrapedDescription)
 	}
 
 	// The footer

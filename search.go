@@ -7,17 +7,18 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
+
 func truncate(str string, length int) (truncated string) {
-    if length <= 0 {
-        return
-    }
-    for i, char := range str {
-        if i >= length {
-            break
-        }
-        truncated += string(char)
-    }
-    return
+	if length <= 0 {
+		return
+	}
+	for i, char := range str {
+		if i >= length {
+			break
+		}
+		truncated += string(char)
+	}
+	return
 }
 
 func SearchView(m model) string {
@@ -31,8 +32,8 @@ func SearchView(m model) string {
 			cursor = "*"
 		}
 		// Render the row
-        maxW := m.viewport.Width - len(m.Articles[i].Title) - 5
-        truncatedDescription := truncate(m.Articles[i].Description, maxW)
+		maxW := m.viewport.Width - len(m.Articles[i].Title) - 5
+		truncatedDescription := truncate(m.Articles[i].Description, maxW)
 		s += fmt.Sprintf("%s %s — %s \n", cursor, listArticleStyle(m.Articles[i].Title), truncatedDescription)
 	}
 
